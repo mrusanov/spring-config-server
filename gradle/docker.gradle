@@ -1,0 +1,28 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath ('com.bmuschko:gradle-docker-plugin:3.2.5')
+    }
+}
+
+// use fully qualified class name
+apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+
+version '1.0-SNAPSHOT'
+
+// import task classes
+import com.bmuschko.gradle.docker.tasks.image.*
+
+docker {
+    url = 'https://192.168.99.100:2376'
+    certPath = new File(System.properties['user.home'], '.docker/machine/certs/')
+}
+
+// use task classes
+task buildDockerImage(type: DockerBuildImage) {
+    dependsOn(bootJar)
+    inputDir = project.file("${project.rootDir}")
+    tag = "${jar.baseName}:${jar.version}"
+}

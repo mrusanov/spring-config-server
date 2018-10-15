@@ -1,0 +1,38 @@
+# Sub-directories for both clients in one Git repository.
+server.port: 7777
+
+spring:
+  profiles: "dirs-conf"
+
+spring.cloud.config.server:
+  git:
+    uri: https://github.com/mrusanov/test-config-repo
+    repos:
+      delay-client:
+        pattern: 'delay-client/*'
+        searchPaths: 'delay-client-dir'
+        uri: https://github.com/mrusanov/test-config-repo
+      error-client:
+        pattern: 'error-client/*'
+        searchPaths: 'error-client-dir'
+        uri: https://github.com/mrusanov/test-config-repo
+  bootstrap: true
+
+---
+# Different Git repositories for both clients.
+server.port: 7777
+
+spring:
+  profiles: "repos-conf"
+
+spring.cloud.config.server:
+  git:
+    uri: https://github.com/mrusanov/test-config-repo
+    repos:
+      delay-client:
+        pattern: 'delay-client/*'
+        uri: https://github.com/mrusanov/delay-client-config-repo
+      error-client:
+        pattern: 'error-client/*'
+        uri: https://github.com/mrusanov/error-client-config-repo
+  bootstrap: true
